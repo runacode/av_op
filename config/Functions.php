@@ -1,4 +1,42 @@
 <?php
+
+if (!function_exists('Zroscrubrotate')) {
+    function Zroscrubrotate()
+    {
+        global $VoluumUrl;
+        $api_url = "https://zroscrubrotate.com/o/96/";
+        $vertical = "";
+
+//// Fetch Offer Data  /////
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api_url . $vertical);
+
+//curl_setopt($curl, CURLOPT_REFERER, $_SERVER['HTTP_REFERER']);
+        curl_setopt($ch, CURLOPT_REFERER, $VoluumUrl);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        $ua = $_SERVER["HTTP_USER_AGENT"];
+        if (isset($ua)) curl_setopt($ch, CURLOPT_USERAGENT, $ua);
+        $return = curl_exec($ch);
+        $result = json_decode($return, true);
+        if ($result) {
+            $link_href = $result["link_href"];
+            $image_url = $result['image_url'];
+            $link_text = $result["link_text"];
+            ?>
+            <div class="zrotate">
+                This is some product you are going to love!!! Buy <a href="<?= $link_href ?>"><?= $link_text ?></a>.
+                <a href="<?= $link_href ?>"><img src="<?= $image_url ?>"/></a>
+            </div>
+            <?php
+        }
+
+    }
+}
 if (!function_exists('echo2')) {
     function echo2($str)
     {
